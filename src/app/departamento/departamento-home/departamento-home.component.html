@@ -1,0 +1,38 @@
+<div class="h-80 w-screen flex items-center justify-center p-4">
+  <p-table
+    [value]="departamentos"
+    [paginator]="true"
+    [rows]="5"
+    [tableStyle]="{ 'min-width': '50rem', 'max-width': '50rem' }"
+    [style]="{ 'box-shadow': '0 4px 8px rgba(0,0,0,0.1)', 'border-radius': '8px' }"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    class=""
+  >
+    <ng-template #header>
+      <tr>
+        <th class="w-1/3 text-center p-4" style="text-align: center">Codigo</th>
+        <th class="w-1/3 text-center p-4" style="text-align: center">Nombre</th>
+        <th class="w-1/3 text-center p-4" style="text-align: center">Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-depa>
+      <tr class="">
+        <td class="text-center p-4" style="text-align: center">{{ depa.codigo }}</td>
+        <td class="text-center p-4" style="text-align: center">{{ depa.nombre }}</td>
+        <td class="text-center p-4 space-x-2" style="text-align: center">
+          <a
+            [routerLink]="['/actualiza', depa.id]"
+            [queryParams]="{action:'1'}"
+            class="p-button p-button-rounded p-button-text p-button-icon-only"
+          >
+            <i class="pi pi-file-edit"></i>
+          </a>
+          <button
+            type="button"
+            class="pi pi-trash p-button-text p-button-icon-only"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
