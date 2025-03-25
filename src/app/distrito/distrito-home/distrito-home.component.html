@@ -29,7 +29,7 @@
           <td class="text-center p-4" style="text-align: center">{{mostrarDepa(dist)}}</td>
           <td class="text-center p-4 space-x-2" style="text-align: center">
             <a
-              [routerLink]="['/updateMuni', dist.id]"
+              [routerLink]="['/updateDist', dist.id]"
               class="p-button p-button-rounded p-button-text p-button-icon-only"
             >
               <i class="pi pi-file-edit"></i>
@@ -84,7 +84,7 @@
 
     <div class="form-floating mt-3">
       <div class="flex items-center gap-3 mb-1">
-        <label for="depaSelect" class="font-semibold text-gray-300 w-24">Departamento</label>
+        <label for="depaSelect" class="font-semibold text-gray-300 w-24">Municipio</label>
         <select
           class="form-select w-full p-2 bg-gray-950 border-2 text-gray-200"
           id="depaSelect"
@@ -92,18 +92,17 @@
           #departamento="ngModel"
           required
         >
-          <option value="" disabled selected class="bg-gray-700 text-gray-300">Seleccione un departamento</option>
+          <option value="" disabled selected class="bg-gray-700 text-gray-300">Seleccione un Municipio</option>
           <option
-            *ngFor="let depa of distritos"
-            value="{{depa.id}}"
+            *ngFor="let muni of muni"
             class="bg-gray-700 text-gray-200 hover:bg-gray-600"
           >
-            {{depa.nombre}}
+            {{muni.nombre}}
           </option>
         </select>
       </div>
       <div *ngIf="departamento.invalid && (departamento.dirty || departamento.touched)" class="ml-28 text-red-400 text-sm">
-        El Departamento es obligatorio.
+        El Municipio es obligatorio.
       </div>
     </div>
 

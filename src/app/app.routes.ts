@@ -4,6 +4,7 @@ import {DepartamentoUpdateComponent} from './departamento/departamento-update/de
 import {MunicipioHomeComponent} from './municipio/municipio-home/municipio-home.component';
 import {DistritoHomeComponent} from './distrito/distrito-home/distrito-home.component';
 import {MunicipioUpdateComponent} from './municipio/municipio-update/municipio-update.component';
+import {DistritoUpdateComponent} from './distrito/distrito-update/distrito-update.component';
 
 export const routes: Routes = [
   {path:'', component:DepartamentoHomeComponent},
@@ -11,4 +12,5 @@ export const routes: Routes = [
   {path: 'municipio',component:MunicipioHomeComponent},
   {path: 'distrito',component:DistritoHomeComponent},
   {path: 'updateMuni/:id',component:MunicipioUpdateComponent},
+  {path: 'updateDist/:id',component:DistritoUpdateComponent},
 ];

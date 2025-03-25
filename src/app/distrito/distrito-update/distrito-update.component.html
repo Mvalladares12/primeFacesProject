@@ -1,0 +1,66 @@
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="bg-gray-950 rounded-lg shadow-xl p-6 w-full max-w-2xl">
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <div class="flex-1 flex flex-col gap-4">
+        <div class="form-floating flex flex-col gap-2">
+          <label for="codigo" class="font-semibold">Código</label>
+          <input pInputText id="codigo"
+                 [(ngModel)]="cCodigo"
+                 [disabled]="true"
+                 class="flex-auto uppercase placeholder:normal-case"
+                 autocomplete="off"
+                 #codigo="ngModel"
+                 required minlength="2"
+                 placeholder="Codigo"
+                 maxlength="2"
+          />
+          <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)" class=" text-sm">
+            <div *ngIf="codigo.errors?.['required']">
+              El código es obligatorio.
+            </div>
+            <div *ngIf="codigo.errors?.['minlength'] || codigo.errors?.['maxlength'] || codigo.errors?.['pattern']">
+              El código debe tener exactamente 2 caracteres.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flex justify-start gap-2">
+          <a (click)="backHome()">
+            <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-text p-button-sm"></p-button>
+          </a>
+          <a (click)="update()">
+            <p-button label="Guardar" icon="pi pi-save" styleClass="p-button-sm"></p-button>
+          </a>
+        </div>
+      </div>
+
+
+      <div class="flex-1 flex flex-col gap-2">
+        <div class="form-floating flex flex-col gap-2">
+          <label for="nombre" class="font-semibold">Nombre</label>
+          <input pInputText id="nombre"
+                 [(ngModel)]="cNombre"
+                 #nombre="ngModel"
+                 class="flex-auto"
+                 autocomplete="off"
+                 required
+                 placeholder="Nombre"
+                 maxlength="80"
+                 minlength="5"
+          />
+          <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class=" text-sm">
+            <div *ngIf="nombre.errors?.['required']">
+              El nombre es obligatorio.
+            </div>
+            <div *ngIf="nombre.errors?.['minlength'] || nombre.errors?.['maxlength'] || nombre.errors?.['pattern']">
+              El nombre debe tener entre 5 y 80 caracteres.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

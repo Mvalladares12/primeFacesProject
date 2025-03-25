@@ -102,9 +102,8 @@ export class DistritoHomeComponent implements OnInit {
     )
 
     this.distritoService.addDistritos(myDist,distri);
-    this.cIdMunicipio=0;
-    this.cCodigo='';
-    this.cNombre='';
+    this.clean();
+    this.visible=false;
   }
 
   clean(){
