@@ -11,7 +11,7 @@ import {Menu} from 'primeng/menu';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, Toolbar, AvatarModule, ButtonModule, RouterLink, Menu],
+  imports: [RouterOutlet, CommonModule, Toolbar, AvatarModule, ButtonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

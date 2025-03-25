@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
 import {DepartamentoHomeComponent} from './departamento/departamento-home/departamento-home.component';
 import {DepartamentoUpdateComponent} from './departamento/departamento-update/departamento-update.component';
-import {HttpClient} from '@angular/common/http';
+import {MunicipioHomeComponent} from './municipio/municipio-home/municipio-home.component';
+import {DistritoHomeComponent} from './distrito/distrito-home/distrito-home.component';
+import {MunicipioUpdateComponent} from './municipio/municipio-update/municipio-update.component';
 
 export const routes: Routes = [
   {path:'', component:DepartamentoHomeComponent},
-  {path:'update',component:DepartamentoUpdateComponent,} //agregar el id
+  {path:'update/:id',component:DepartamentoUpdateComponent,}, //agregar el id
+  {path: 'municipio',component:MunicipioHomeComponent},
+  {path: 'distrito',component:DistritoHomeComponent},
+  {path: 'updateMuni/:id',component:MunicipioUpdateComponent},
 ];

@@ -6,22 +6,29 @@ import {Departamento} from '../../models/departamento.model';
 import {DepaServiceService} from '../../services/depa-service.service';
 import {Router, RouterLink} from '@angular/router';
 import {DepaDataServiceService} from '../../services/depa-data-service.service';
+import {Button, ButtonModule} from 'primeng/button';
+import {Dialog} from 'primeng/dialog';
+import {InputTextModule} from 'primeng/inputtext';
+import {FormsModule} from '@angular/forms';
+import {Toast, ToastModule} from 'primeng/toast';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-departamento-home',
-  imports: [TableModule, CommonModule, RouterLink],
+  imports: [TableModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule],
   templateUrl: './departamento-home.component.html',
-  styles: [`
-    .fullscreen-container {
-      width: 50%;
-      height: 50%;
-      /*overflow: auto;*/
-    }
-  `]
+  styles: [
+    `.fullscreen-container {
+      width: 100%;
+      height: 100%;
+      /*overflow: auto*/
+    }`
+  ],
+  providers: [ConfirmationService, MessageService]
 })
 export class DepartamentoHomeComponent implements OnInit {
 
-  constructor(private departamentoService:DepaServiceService, private router:Router, private dds:DepaDataServiceService) {
+  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService) {
   }
 
   ngOnInit(): void {
@@ -32,11 +39,19 @@ export class DepartamentoHomeComponent implements OnInit {
     })
   }
 
-  index?:number;
+  //index?:number;
 
   departamentos: Departamento[] = [];
 
-  delete(id:number, index:number) {
+  visible: boolean = false;
+
+  showDialog(){
+    this.visible = true;
+    this.clean();
+  }
+
+  delete(id:number) {
+    const index=this.departamentos.findIndex(x => x.id === id);
     this.departamentoService.deleteDepartamentos(id);
     this.departamentos.splice(index,1);
   }
@@ -53,8 +68,8 @@ export class DepartamentoHomeComponent implements OnInit {
       this.cNombre
     );
     this.departamentoService.addDepartamentos(myDepartamento, depa);
-    this.cCodigo='';
-    this.cNombre=''
+    this.clean()
+    this.visible = false;
   }
 
   clean(){
@@ -81,4 +96,30 @@ export class DepartamentoHomeComponent implements OnInit {
       console.error('Error al descargar el reporte', error);
     });
   }
+
+  // confirm2(event: Event) {
+  //   this.confirmationService.confirm({
+  //     target: event.target as EventTarget,
+  //     message: 'Do you want to delete this record?',
+  //     header: 'Danger Zone',
+  //     icon: 'pi pi-info-circle',
+  //     rejectLabel: 'Cancel',
+  //     rejectButtonProps: {
+  //       label: 'Cancel',
+  //       severity: 'secondary',
+  //       outlined: true,
+  //     },
+  //     acceptButtonProps: {
+  //       label: 'Delete',
+  //       severity: 'danger',
+  //     },
+  //
+  //     accept: () => {
+  //       this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
+  //     },
+  //     reject: () => {
+  //       this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+  //     },
+  //   });
+  // }
 }
