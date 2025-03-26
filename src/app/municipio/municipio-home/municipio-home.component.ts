@@ -9,7 +9,6 @@ import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {RouterLink} from '@angular/router';
-import {CascadeSelect, CascadeSelectModule} from 'primeng/cascadeselect';
 
 @Component({
   selector: 'app-municipio-home',
@@ -22,7 +21,6 @@ import {CascadeSelect, CascadeSelectModule} from 'primeng/cascadeselect';
     TableModule,
     RouterLink,
     FormsModule,
-    CascadeSelect,
     NgForOf
   ],
   templateUrl: './municipio-home.component.html',

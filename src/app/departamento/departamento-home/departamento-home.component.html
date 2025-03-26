@@ -1,9 +1,37 @@
 <div class="h-100vh w-screen flex flex-col items-center p-4 ">
   <div style="min-width: 50rem; max-width: 50rem;">
-    <div class="mb-4">
+    <div class="mb-4 flex justify-between">
       <p-button (click)="showDialog()" label="Agregar" >
         <i class="pi pi-plus-circle" ></i>
       </p-button>
+      <div class="flex justify-end">
+<!--        <div class="card flex justify-center">-->
+<!--          <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Formato" class="w-full md:w-56" />-->
+<!--        </div>-->
+        <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" placeholder="Formato" class="w-full md:w-56">
+          <ng-template #selectedItem let-selectedOption>
+            <div class="flex items-center gap-2" *ngIf="selectedOption">
+              <img
+                [class]="'pi file-' + selectedOption.code.toLowerCase()"
+                style="width: 18px"
+              />
+              <div>{{ selectedOption.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-country #item>
+            <div class="flex items-center gap-2">
+              <img
+                [class]="'pi file-' + country.code.toLowerCase()"
+                style="width: 18px"
+              />
+              <div>{{ country.name }}</div>
+            </div>
+          </ng-template>
+        </p-select>
+        <p-button (click)="generarReporte()" label="Generar" >
+          <i class="pi pi-print" ></i>
+        </p-button>
+      </div>
     </div>
 
     <p-table

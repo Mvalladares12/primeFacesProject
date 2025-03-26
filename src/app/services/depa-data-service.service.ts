@@ -21,7 +21,7 @@ export class DepaDataServiceService {
   saveDepartamentos(departamento:DepartamentoDTO){
     //const departamentoObj={departamento}
     this.http.post(this.apiURL,departamento).subscribe(
-      (response)=>console.log('Se guardó el departamento'+response),
+      (response)=>console.log('Se guardó el departamento: '+response),
       (error) => console.error(`Error: ${error}`)
     )
   }
@@ -49,6 +49,6 @@ export class DepaDataServiceService {
   }
 
   getReport():Observable<Blob>{
-    return this.http.get(this.apiDepa+'/pdf', {responseType: "blob"});
+    return this.http.get(this.apiDepa+'/report/pdf', {responseType: "blob"});
   }
 }

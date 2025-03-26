@@ -4,18 +4,20 @@ import { CommonModule } from '@angular/common';
 import {DepartamentoDTO} from '../../models/departamentoDTO.model';
 import {Departamento} from '../../models/departamento.model';
 import {DepaServiceService} from '../../services/depa-service.service';
-import {Router, RouterLink} from '@angular/router';
+import { RouterLink} from '@angular/router';
 import {DepaDataServiceService} from '../../services/depa-data-service.service';
-import {Button, ButtonModule} from 'primeng/button';
+import { ButtonModule} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
 import {InputTextModule} from 'primeng/inputtext';
 import {FormsModule} from '@angular/forms';
-import {Toast, ToastModule} from 'primeng/toast';
+import {ToastModule} from 'primeng/toast';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {Select} from 'primeng/select';
+
 
 @Component({
   selector: 'app-departamento-home',
-  imports: [TableModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule],
+  imports: [TableModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule, Select],
   templateUrl: './departamento-home.component.html',
   styles: [
     `.fullscreen-container {
@@ -37,9 +39,16 @@ export class DepartamentoHomeComponent implements OnInit {
       this.departamentoService.setDepartamentos(this.departamentos);
       console.log(this.departamentos);
     })
+    this.countries = [
+      { name: 'pdf', code: 'pdf' },
+      { name: 'word', code: 'word' },
+      { name: 'excel', code: 'excel' }
+    ];
   }
 
-  //index?:number;
+  countries: any[] | undefined;
+
+  selectedCountry: string | undefined;
 
   departamentos: Departamento[] = [];
 
@@ -87,7 +96,7 @@ export class DepartamentoHomeComponent implements OnInit {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'reporte.pdf';
+      a.download = 'reporte_departamento.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -96,30 +105,4 @@ export class DepartamentoHomeComponent implements OnInit {
       console.error('Error al descargar el reporte', error);
     });
   }
-
-  // confirm2(event: Event) {
-  //   this.confirmationService.confirm({
-  //     target: event.target as EventTarget,
-  //     message: 'Do you want to delete this record?',
-  //     header: 'Danger Zone',
-  //     icon: 'pi pi-info-circle',
-  //     rejectLabel: 'Cancel',
-  //     rejectButtonProps: {
-  //       label: 'Cancel',
-  //       severity: 'secondary',
-  //       outlined: true,
-  //     },
-  //     acceptButtonProps: {
-  //       label: 'Delete',
-  //       severity: 'danger',
-  //     },
-  //
-  //     accept: () => {
-  //       this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
-  //     },
-  //     reject: () => {
-  //       this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-  //     },
-  //   });
-  // }
 }
