@@ -9,6 +9,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {RouterLink} from '@angular/router';
+import {DistriDataServiceService} from '../../services/distri-data-service.service';
 
 @Component({
   selector: 'app-distrito-home',
@@ -28,7 +29,7 @@ import {RouterLink} from '@angular/router';
 })
 export class DistritoHomeComponent implements OnInit {
 
-  constructor(private distritoService:DistriServiceService) {
+  constructor(private distritoService:DistriServiceService, private dds:DistriDataServiceService) {
   }
 
   ngOnInit(): void {
@@ -41,7 +42,17 @@ export class DistritoHomeComponent implements OnInit {
       this.muni= Object.values(myMuni);
       this.distritoService.setMuni(this.muni);
     })
+
+    this.formato = [
+      { name: 'pdf', code: 'pdf' },
+      { name: 'word', code: 'docx' },
+      { name: 'excel', code: 'xlsx' }
+    ];
   }
+
+  formato: any[] | undefined;
+
+  seleccion: string='';
 
   index?:number;
 
@@ -87,7 +98,6 @@ export class DistritoHomeComponent implements OnInit {
       console.log('no se encontró'+this.cIdMunicipio)
     }
 
-
     let distri=new Distrito(
       this.cId,
       this.cNombre,
@@ -106,6 +116,7 @@ export class DistritoHomeComponent implements OnInit {
     this.visible=false;
   }
 
+
   clean(){
     this.cCodigo='';
     this.cNombre='';
@@ -116,4 +127,76 @@ export class DistritoHomeComponent implements OnInit {
   cCodigo:string="";
   cNombre:string='';
   cMuni:string='';
+
+  generarReporte() {
+    const formato=this.formato!.find(x=>x.name===this.seleccion)
+    console.log(this.seleccion);
+    console.log(formato.code);
+    switch (this.seleccion) {
+      case 'pdf':
+        this.dds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case 'excel':
+        this.dds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case 'word':
+        this.dds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.docx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case '':
+        this.dds.getReport('pdf').subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_distrito.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      default:
+        console.error('Error al descargar el reporte');
+        break;
+    }
+
+  }
 }

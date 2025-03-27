@@ -1,9 +1,35 @@
 <div class="h-100vh w-screen flex flex-col items-center p-4 ">
   <div style="min-width: 50rem; max-width: 50rem;">
-    <div class="mb-4">
+    <div class="mb-4 flex justify-between">
       <p-button (click)="showDialog()" label="Agregar" >
         <i class="pi pi-plus-circle" ></i>
       </p-button>
+      <div class="flex justify-end">
+
+        <div class="flex items-center  gap-3 mr-1.5 mb-1">
+          <select
+            class="form-select w-full p-3 bg-gray-700 rounded-md"
+            id=""
+            [(ngModel)]="seleccion"
+            #departamento="ngModel"
+            required
+          >
+            <option value="" disabled selected class="bg-gray-500 ">Formato</option>
+            <option
+              *ngFor="let depa of formato"
+              class="bg-gray-700  hover:bg-gray-600"
+            >
+              {{depa.name}}
+              <!--              <i [class]="'pi pi-file-'+depa.name"></i>-->
+            </option>
+          </select>
+        </div>
+
+
+        <p-button (click)="generarReporte()" label="Generar" >
+          <i class="pi pi-print" ></i>
+        </p-button>
+      </div>
     </div>
 
     <p-table
@@ -84,18 +110,18 @@
 
     <div class="form-floating mt-3">
       <div class="flex items-center gap-3 mb-1">
-        <label for="depaSelect" class="font-semibold text-gray-300 w-24">Departamento</label>
+        <label for="depaSelect" class="font-semibold w-24 ">Departamento</label>
         <select
-          class="form-select w-full p-2 bg-gray-950 border-2 text-gray-200"
+          class="form-select w-40 p-2 rounded-md border border-gray-600 bg-gray-950 hover:border-emerald-400 focus:border-emerald-400"
           id="depaSelect"
           [(ngModel)]="cDepa"
           #departamento="ngModel"
           required
         >
-          <option value="" disabled selected class="bg-gray-700 text-gray-300">Seleccione un departamento</option>
+          <option value="" disabled selected class="bg-gray-900 ">Departamento</option>
           <option
             *ngFor="let depa of depa"
-            class="bg-gray-700 text-gray-200 hover:bg-gray-600"
+            class="bg-black hover:bg-gray-800 focus:border-emerald-400"
           >
             {{depa.nombre}}
           </option>

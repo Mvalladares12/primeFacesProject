@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Distrito} from '../models/distrito.model';
 import {DistritoDTO} from '../models/distritoDTO.model';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +50,9 @@ export class DistriDataServiceService {
       (response) => console.log(`Se ha eliminado el municipio: ${response}`),
       (error) => console.log(`Error: ${error}`)
     )
+  }
+
+  getReport(formato:string):Observable<Blob>{
+    return this.http.get(this.apiURL+`/report/${formato}`, {responseType: "blob"});
   }
 }

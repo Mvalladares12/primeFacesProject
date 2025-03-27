@@ -11,13 +11,13 @@ import {Dialog} from 'primeng/dialog';
 import {InputTextModule} from 'primeng/inputtext';
 import {FormsModule} from '@angular/forms';
 import {ToastModule} from 'primeng/toast';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {Select} from 'primeng/select';
+import {AlertService} from '../../services/alert.service';
+import {ConfirmPopupModule} from 'primeng/confirmpopup';
 
 
 @Component({
   selector: 'app-departamento-home',
-  imports: [TableModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule, Select],
+  imports: [TableModule, ConfirmPopupModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule],
   templateUrl: './departamento-home.component.html',
   styles: [
     `.fullscreen-container {
@@ -26,11 +26,10 @@ import {Select} from 'primeng/select';
       /*overflow: auto*/
     }`
   ],
-  providers: [ConfirmationService, MessageService]
 })
 export class DepartamentoHomeComponent implements OnInit {
 
-  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService) {
+  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService, private as:AlertService) {
   }
 
   ngOnInit(): void {
@@ -39,20 +38,27 @@ export class DepartamentoHomeComponent implements OnInit {
       this.departamentoService.setDepartamentos(this.departamentos);
       console.log(this.departamentos);
     })
-    this.countries = [
+
+    this.formato = [
       { name: 'pdf', code: 'pdf' },
-      { name: 'word', code: 'word' },
-      { name: 'excel', code: 'excel' }
+      { name: 'word', code: 'docx' },
+      { name: 'excel', code: 'xlsx' }
     ];
   }
 
-  countries: any[] | undefined;
 
-  selectedCountry: string | undefined;
+  formato: any[] | undefined;
+
+  seleccion: string='';
 
   departamentos: Departamento[] = [];
 
   visible: boolean = false;
+
+
+  cId:number=0;
+  cCodigo:string="";
+  cNombre:string='';
 
   showDialog(){
     this.visible = true;
@@ -66,19 +72,28 @@ export class DepartamentoHomeComponent implements OnInit {
   }
 
   registTabla(){
-    let depa=new Departamento(
-      this?.cId,
-      this.cCodigo.toUpperCase(),
-      this.cNombre
-    )
-    let myDepartamento=new DepartamentoDTO(
-      //this?.cId,
-      this.cCodigo.toUpperCase(),
-      this.cNombre
-    );
-    this.departamentoService.addDepartamentos(myDepartamento, depa);
-    this.clean()
-    this.visible = false;
+
+    const unique=this.departamentos.find(x => x.codigo.toUpperCase() === this.cCodigo.toUpperCase());
+    const mayus=this.cCodigo.toUpperCase();
+
+    if(unique?.codigo != mayus){
+      let depa=new Departamento(
+        this?.cId,
+        this.cCodigo.toUpperCase(),
+        this.cNombre
+      )
+      let myDepartamento=new DepartamentoDTO(
+        //this?.cId,
+        this.cCodigo.toUpperCase(),
+        this.cNombre
+      );
+      this.departamentoService.addDepartamentos(myDepartamento, depa);
+      this.clean()
+      this.visible = false;
+    }else {
+      this.as.showNoti('Este codigo ya está registrado, ingrese uno diferente.');
+    }
+
   }
 
   clean(){
@@ -86,23 +101,76 @@ export class DepartamentoHomeComponent implements OnInit {
     this.cNombre='';
   }
 
-  cId:number=0;
-  cCodigo:string="";
-  cNombre:string='';
 
   generarReporte() {
-    this.dds.getReport().subscribe((data: Blob) => {
-      const blob = new Blob([data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'reporte_departamento.pdf';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, error => {
-      console.error('Error al descargar el reporte', error);
-    });
+    const formato=this.formato!.find(x=>x.name===this.seleccion)
+    console.log(this.seleccion);
+    console.log(formato.code);
+    switch (this.seleccion) {
+      case 'pdf':
+        this.dds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case 'excel':
+        this.dds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case 'word':
+        this.dds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.docx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case '':
+        this.dds.getReport('pdf').subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+        default:
+          console.error('Error al descargar el reporte');
+          break;
+    }
+
   }
 }

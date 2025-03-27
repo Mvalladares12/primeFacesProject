@@ -48,7 +48,7 @@ export class DepaDataServiceService {
     )
   }
 
-  getReport():Observable<Blob>{
-    return this.http.get(this.apiDepa+'/report/pdf', {responseType: "blob"});
+  getReport(formato:string):Observable<Blob>{
+    return this.http.get(this.apiURL+`/report/${formato}`, {responseType: "blob"});
   }
 }

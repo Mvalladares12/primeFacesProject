@@ -9,6 +9,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {RouterLink} from '@angular/router';
+import {MuniDataServiceService} from '../../services/muni-data-service.service';
 
 @Component({
   selector: 'app-municipio-home',
@@ -28,7 +29,7 @@ import {RouterLink} from '@angular/router';
 })
 export class MunicipioHomeComponent implements OnInit {
 
-  constructor(private municipioService:MuniServiceService) {
+  constructor(private municipioService:MuniServiceService, private mds:MuniDataServiceService) {
   }
 
   ngOnInit(): void {
@@ -41,11 +42,25 @@ export class MunicipioHomeComponent implements OnInit {
     this.municipioService.loadDepa().subscribe((myDepartamento) => {
       this.depa=Object.values(myDepartamento);
       this.municipioService.setDepa(this.depa);
-      //const nombreDepa=this.municipios.find(x=>x.id===Municipio.i)
     })
+
+    this.formato = [
+      { name: 'pdf', code: 'pdf' },
+      { name: 'word', code: 'docx' },
+      { name: 'excel', code: 'xlsx' }
+    ];
   }
 
+  formato: any[] | undefined;
+
+  seleccion: string='';
+
   index?:number;
+  cId:number=0;
+  cIdDepartam?:number;
+  cCodigo:string="";
+  cNombre:string='';
+  cDepa:string='';
 
   municipios:Municipio[]=[];
   depa:Depa[]=[];
@@ -92,7 +107,6 @@ export class MunicipioHomeComponent implements OnInit {
     if(arreglo){
       this.cIdDepartam=arreglo.id
       console.log(this.cIdDepartam)
-      //this.cIdDepartam=this.idencontrado;
     }else {
       console.log('no se encontró'+this.cIdDepartam)
     }
@@ -122,9 +136,57 @@ export class MunicipioHomeComponent implements OnInit {
     this.cNombre='';
   }
 
-  cId:number=0;
-  cIdDepartam?:number;
-  cCodigo:string="";
-  cNombre:string='';
-  cDepa:string='';
+  generarReporte() {
+    const formato=this.formato!.find(x=>x.name===this.seleccion)
+    console.log(this.seleccion);
+    console.log(formato.code);
+    switch (this.seleccion) {
+      case 'pdf':
+        this.mds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case 'excel':
+        this.mds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+      case 'word':
+        this.mds.getReport(formato.code).subscribe((data: Blob) => {
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte_departamento.docx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, error => {
+          console.error('Error al descargar el reporte', error);
+        });
+        break;
+    }
+
+  }
 }
