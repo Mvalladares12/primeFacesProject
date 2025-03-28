@@ -13,6 +13,7 @@ import {FormsModule} from '@angular/forms';
 import {ToastModule} from 'primeng/toast';
 import {AlertService} from '../../services/alert.service';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
+import {AuthService} from '../../services/auth.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ import {ConfirmPopupModule} from 'primeng/confirmpopup';
 })
 export class DepartamentoHomeComponent implements OnInit {
 
-  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService, private as:AlertService) {
+  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService, private as:AlertService, private auth:AuthService) {
   }
 
   ngOnInit(): void {
@@ -37,6 +38,11 @@ export class DepartamentoHomeComponent implements OnInit {
       this.departamentos=Object.values(myDepa);
       this.departamentoService.setDepartamentos(this.departamentos);
       console.log(this.departamentos);
+
+      this.auth.getToken().subscribe(
+        token=>this.token=token,
+      )
+      console.log(this.token);
     })
 
     this.formato = [
@@ -46,6 +52,13 @@ export class DepartamentoHomeComponent implements OnInit {
     ];
   }
 
+  // fetchToken(){
+  //   this.auth.getToken().subscribe(
+  //     token=>this.token=token,
+  //   )
+  // }
+
+  token:string='';
 
   formato: any[] | undefined;
 
@@ -72,7 +85,6 @@ export class DepartamentoHomeComponent implements OnInit {
   }
 
   registTabla(){
-
     const unique=this.departamentos.find(x => x.codigo.toUpperCase() === this.cCodigo.toUpperCase());
     const mayus=this.cCodigo.toUpperCase();
 
@@ -87,7 +99,7 @@ export class DepartamentoHomeComponent implements OnInit {
         this.cCodigo.toUpperCase(),
         this.cNombre
       );
-      this.departamentoService.addDepartamentos(myDepartamento, depa);
+      this.departamentoService.addDepartamentos(myDepartamento, depa, this.token);
       this.clean()
       this.visible = false;
     }else {

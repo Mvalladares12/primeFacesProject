@@ -14,7 +14,7 @@ export class DepaServiceService {
     this.departamentos=myDepartamento;
   }
 
-
+  token:Object='';
 
   loadDepartamentos(){
     return this.dataService.getDepartamentos();
@@ -27,11 +27,9 @@ export class DepaServiceService {
 
 
 
-  addDepartamentos(departamento:DepartamentoDTO, depa:Departamento){
-    // this.departamentos.push(departamento)
-    console.log(this.departamentos);
+  addDepartamentos(departamento:DepartamentoDTO, depa:Departamento, token:string){
     this.departamentos.push(depa);
-    this.dataService.saveDepartamentos(departamento);
+    this.dataService.saveDepartamentos(departamento,token);
   }
 
 

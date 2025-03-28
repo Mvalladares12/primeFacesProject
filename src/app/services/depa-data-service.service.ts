@@ -1,26 +1,34 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {catchError, Observable} from 'rxjs';
 import {DepartamentoDTO} from '../models/departamentoDTO.model';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DepaDataServiceService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   private apiURL: string = "http://localhost:8080/departamento";
-  private apiDepa: string = "http://localhost:8080/departamento";
+
+  /*token:string='';
+  getToken(){
+    this.auth.getToken().subscribe(
+      token=>this.token=token,
+    )
+  }*/
+
 
   getDepartamentos(){
     return this.http.get(this.apiURL);
   }
 
 
-  saveDepartamentos(departamento:DepartamentoDTO){
-    //const departamentoObj={departamento}
-    this.http.post(this.apiURL,departamento).subscribe(
+  saveDepartamentos(departamento:DepartamentoDTO, token:string){
+    const headers ={'Authorization': `Bearer ${token}`};
+    this.http.post(this.apiURL,departamento, {headers}).subscribe(
       (response)=>console.log('Se guardó el departamento: '+response),
       (error) => console.error(`Error: ${error}`)
     )
