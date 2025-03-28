@@ -35,10 +35,11 @@ export class DepaDataServiceService {
   }
 
 
-  updateDepartamentos(index:number, departamento:DepartamentoDTO){
+  updateDepartamentos(index:number, departamento:DepartamentoDTO, token:string){
     let url= `${this.apiURL}/${index}`;
+    const headers ={'Authorization': `Bearer ${token}`};
 
-    this.http.put(url, departamento).subscribe(
+    this.http.put(url, departamento, {headers}).subscribe(
       (response) => console.log(`Se ha actualizado el departamento: ${response}`),
 
       (error) => console.log(`Error: ${error}`)
@@ -47,10 +48,11 @@ export class DepaDataServiceService {
 
 
 
-  deleteDepartamentos(index:number){
+  deleteDepartamentos(index:number, token:string){
     let url= `${this.apiURL}/${index}`;
+    const headers ={'Authorization': `Bearer ${token}`};
 
-    this.http.delete(url).subscribe(
+    this.http.delete(url, {headers}).subscribe(
       (response) => console.log(`Se ha eliminado el departamento: ${response}`),
       (error) => console.log(`Error: ${error}`)
     )

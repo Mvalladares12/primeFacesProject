@@ -14,6 +14,8 @@ import {ToastModule} from 'primeng/toast';
 import {AlertService} from '../../services/alert.service';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {AuthService} from '../../services/auth.service';
+import {MuniServiceService} from '../../services/muni-service.service';
+import {Municipio} from '../../models/municipio.model';
 
 
 @Component({
@@ -30,20 +32,23 @@ import {AuthService} from '../../services/auth.service';
 })
 export class DepartamentoHomeComponent implements OnInit {
 
-  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService, private as:AlertService, private auth:AuthService) {
+  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService, private municipioService:MuniServiceService, private alertService:AlertService, private auth:AuthService) {
   }
 
   ngOnInit(): void {
     this.departamentoService.loadDepartamentos().subscribe(myDepa => {
       this.departamentos=Object.values(myDepa);
       this.departamentoService.setDepartamentos(this.departamentos);
-      console.log(this.departamentos);
-
-      this.auth.getToken().subscribe(
-        token=>this.token=token,
-      )
-      console.log(this.token);
     })
+
+    this.municipioService.loadMunicipios().subscribe(myMunicipio => {
+      this.municipios=Object.values(myMunicipio);
+      this.municipioService.setMunicipios(this.municipios);
+    })
+
+    this.auth.getToken().subscribe(
+      token=>this.token=token,
+    )
 
     this.formato = [
       { name: 'pdf', code: 'pdf' },
@@ -52,22 +57,19 @@ export class DepartamentoHomeComponent implements OnInit {
     ];
   }
 
-  // fetchToken(){
-  //   this.auth.getToken().subscribe(
-  //     token=>this.token=token,
-  //   )
-  // }
-
   token:string='';
 
   formato: any[] | undefined;
 
   seleccion: string='';
 
+  municipios:Municipio[]=[];
+
   departamentos: Departamento[] = [];
 
   visible: boolean = false;
 
+  exist:boolean = false;
 
   cId:number=0;
   cCodigo:string="";
@@ -78,10 +80,22 @@ export class DepartamentoHomeComponent implements OnInit {
     this.clean();
   }
 
+  eval(id:number){
+    const del=this.municipios.find(i => i.idDepartamento == id);
+    console.log(del);
+
+    if (del!=null) {
+      this.alertService.error('Este departamento no puede ser borrado porque contiene municipios relacionados!', 'Error!');
+    }else {
+      this.delete(id);
+      this.alertService.success('Departamento borrado!', 'success!');
+    }
+  }
+
   delete(id:number) {
-    const index=this.departamentos.findIndex(x => x.id === id);
-    this.departamentoService.deleteDepartamentos(id);
-    this.departamentos.splice(index,1);
+      const index=this.departamentos.findIndex(x => x.id === id);
+      this.departamentoService.deleteDepartamentos(id, this.token);
+      this.departamentos.splice(index,1);
   }
 
   registTabla(){
@@ -101,9 +115,10 @@ export class DepartamentoHomeComponent implements OnInit {
       );
       this.departamentoService.addDepartamentos(myDepartamento, depa, this.token);
       this.clean()
+      this.alertService.success('Departamento agregado!', 'success!');
       this.visible = false;
     }else {
-      this.as.showNoti('Este codigo ya está registrado, ingrese uno diferente.');
+      this.alertService.warning('Este código ya existe, ingresa otro', 'Codigo existente')
     }
 
   }
@@ -112,7 +127,6 @@ export class DepartamentoHomeComponent implements OnInit {
     this.cCodigo='';
     this.cNombre='';
   }
-
 
   generarReporte() {
     const formato=this.formato!.find(x=>x.name===this.seleccion)

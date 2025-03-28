@@ -8,6 +8,8 @@ import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {NgIf} from '@angular/common';
 import {DepartamentoDTO} from '../../models/departamentoDTO.model';
+import {AuthService} from '../../services/auth.service';
+import {AlertService} from '../../services/alert.service';
 
 @Component({
   selector: 'app-departamento-update',
@@ -23,7 +25,7 @@ import {DepartamentoDTO} from '../../models/departamentoDTO.model';
 })
 export class DepartamentoUpdateComponent implements OnInit {
 
-  constructor(private departamentoService:DepaServiceService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private departamentoService:DepaServiceService, private route: ActivatedRoute, private router: Router, private auth:AuthService, private alertService:AlertService) { }
 
   cId:number=0;
   cNombre: string='';
@@ -37,7 +39,13 @@ export class DepartamentoUpdateComponent implements OnInit {
       this.cId= departamento.id;
       this.cNombre = departamento.nombre;
       this.cCodigo = departamento.codigo;
+
+      this.auth.getToken().subscribe(
+        token=>this.token=token,
+      )
   }
+
+  token:string='';
 
   departamentos:Departamento[] = [];
 
@@ -48,11 +56,12 @@ export class DepartamentoUpdateComponent implements OnInit {
   update(){
     if(this.cId!=null){
       this.router.navigate(['']);
+      this.alertService.success('Departamento modificado', 'success!');
       const myTabla=new DepartamentoDTO(
         this.cCodigo,
         this.cNombre
       );
-      this.departamentoService.updateDepartamentos(this.index, this.cId,myTabla);
+      this.departamentoService.updateDepartamentos(this.index, this.cId,myTabla, this.token);
       this.departamentoService.departamentos=this.departamentos;
     }else {
       this.router.navigate(['']);

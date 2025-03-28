@@ -40,17 +40,17 @@ export class DepaServiceService {
   }
 
 
-  updateDepartamentos(index:number, id:number, departamento:DepartamentoDTO){
+  updateDepartamentos(index:number, id:number, departamento:DepartamentoDTO, token:string){
     let modifiedDepa=this.departamentos.find(x => x.id === index);
     modifiedDepa!.nombre=departamento.nombre;
     modifiedDepa!.codigo=departamento.codigo;
-    this.dataService.updateDepartamentos(id,modifiedDepa!);
+    this.dataService.updateDepartamentos(id,modifiedDepa!, token);
   }
 
 
 
-  deleteDepartamentos(index:number){
-    this.dataService.deleteDepartamentos(index);
+  deleteDepartamentos(index:number, token:string){
+    this.dataService.deleteDepartamentos(index, token);
     this.departamentos.splice(index,1);
   }
 
