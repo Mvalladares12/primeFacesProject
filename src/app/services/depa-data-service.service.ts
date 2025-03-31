@@ -2,27 +2,21 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, Observable} from 'rxjs';
 import {DepartamentoDTO} from '../models/departamentoDTO.model';
-import {AuthService} from './auth.service';
+import {LoginService} from '../login/login.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DepaDataServiceService {
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private loginService: LoginService) { }
 
   private apiURL: string = "http://localhost:8080/departamento";
 
-  /*token:string='';
-  getToken(){
-    this.auth.getToken().subscribe(
-      token=>this.token=token,
-    )
-  }*/
-
 
   getDepartamentos(){
-    return this.http.get(this.apiURL);
+    const headers={'Authorization': `Basic ${this.loginService.getToken()}`}
+    return this.http.get(this.apiURL, {headers});
   }
 
 

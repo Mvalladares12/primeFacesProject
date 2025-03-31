@@ -4,14 +4,13 @@ import {CommonModule} from '@angular/common';
 import {MenuItem} from 'primeng/api';
 import {Toolbar} from 'primeng/toolbar';
 import { AvatarModule } from 'primeng/avatar';
-import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import {Router} from '@angular/router';
-import {Menu} from 'primeng/menu';
+import {LoginService} from './login/login.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, Toolbar, AvatarModule, ButtonModule],
+  imports: [RouterOutlet, CommonModule, Toolbar, AvatarModule, ButtonModule, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -21,7 +20,7 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] | undefined;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private loginService: LoginService) {}
 
   ngOnInit() {
     this.items = [
@@ -52,5 +51,13 @@ export class AppComponent implements OnInit {
         ]
       }
     ];
+  }
+
+  isLoged(){
+    return this.loginService.isLoged();
+  }
+
+  logout(){
+    this.loginService.logout();
   }
 }

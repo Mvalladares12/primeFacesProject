@@ -50,12 +50,12 @@ export class DepartamentoUpdateComponent implements OnInit {
   departamentos:Departamento[] = [];
 
   backHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/depa']);
   }
 
   update(){
     if(this.cId!=null){
-      this.router.navigate(['']);
+      this.router.navigate(['/depa']);
       this.alertService.success('Departamento modificado', 'success!');
       const myTabla=new DepartamentoDTO(
         this.cCodigo,
@@ -64,7 +64,7 @@ export class DepartamentoUpdateComponent implements OnInit {
       this.departamentoService.updateDepartamentos(this.index, this.cId,myTabla, this.token);
       this.departamentoService.departamentos=this.departamentos;
     }else {
-      this.router.navigate(['']);
+      this.router.navigate(['/depa']);
     }
   }
 }

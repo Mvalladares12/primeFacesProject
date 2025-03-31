@@ -16,8 +16,8 @@ export class DepaServiceService {
 
   token:Object='';
 
-  loadDepartamentos(){
-    return this.dataService.getDepartamentos();
+  loadDepartamentos(/*cred:string*/){
+    return this.dataService.getDepartamentos(/*cred*/);
   }
 
 

@@ -2,7 +2,7 @@
   <p-toolbar >
     <ng-template #start>
       <div class="flex items-center gap-2">
-        <a href="">
+        <a href="/depa">
           <p-button label="Departamento" text>
             <i class="pi pi-map"></i>
           </p-button>
@@ -20,11 +20,24 @@
       </div>
     </ng-template>
 
-<!--    <ng-template #end>-->
-<!--      <div class="flex items-center gap-2">-->
-<!--        <p-button label="Share" severity="contrast" size="small" />-->
-<!--      </div>-->
-<!--    </ng-template>-->
+
+    <ng-template #end *ngIf="!isLoged()">
+      <div class="flex items-center gap-2">
+        <a routerLink="">
+          <p-button label="login" severity="contrast" size="small" />
+        </a>
+      </div>
+    </ng-template>
+
+    <ng-template #end *ngIf="isLoged()">
+      <div class="flex items-center gap-2">
+        <a (click)="logout()">
+          <p-button label="logout" severity="contrast" size="small" />
+        </a>
+      </div>
+    </ng-template>
+
+
   </p-toolbar>
 </div>
 

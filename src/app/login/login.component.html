@@ -1,0 +1,14 @@
+<form #form="ngForm" (ngSubmit)="login(form)">
+<p-floatlabel variant="on">
+  <input pInputText id="on_label" name="username" autocomplete="off" ngModel/>
+  <label for="on_label">Usuario</label>
+</p-floatlabel>
+
+<p-floatlabel variant="on">
+  <p-password [feedback]="false" type="password" name="password" inputId="on_labe" ngModel/>
+  <label >Contraseña</label>
+</p-floatlabel>
+
+  <p-button type="submit">Login</p-button>
+<!--<p-button label="Submit" (onClick)="doLogin()"/>-->
+</form>

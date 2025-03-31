@@ -16,6 +16,7 @@ import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {AuthService} from '../../services/auth.service';
 import {MuniServiceService} from '../../services/muni-service.service';
 import {Municipio} from '../../models/municipio.model';
+import {LoginService} from '../../login/login.service';
 
 
 @Component({
@@ -32,11 +33,12 @@ import {Municipio} from '../../models/municipio.model';
 })
 export class DepartamentoHomeComponent implements OnInit {
 
-  constructor(private departamentoService:DepaServiceService, private dds:DepaDataServiceService, private municipioService:MuniServiceService, private alertService:AlertService, private auth:AuthService) {
+  constructor(private departamentoService:DepaServiceService, private loginService:LoginService, private dds:DepaDataServiceService, private municipioService:MuniServiceService, private alertService:AlertService, private auth:AuthService) {
   }
 
   ngOnInit(): void {
-    this.departamentoService.loadDepartamentos().subscribe(myDepa => {
+
+    this.departamentoService.loadDepartamentos(/*this.loginService.token*/).subscribe(myDepa => {
       this.departamentos=Object.values(myDepa);
       this.departamentoService.setDepartamentos(this.departamentos);
     })
@@ -46,9 +48,7 @@ export class DepartamentoHomeComponent implements OnInit {
       this.municipioService.setMunicipios(this.municipios);
     })
 
-    this.auth.getToken().subscribe(
-      token=>this.token=token,
-    )
+    console.log(this.loginService.token);
 
     this.formato = [
       { name: 'pdf', code: 'pdf' },
@@ -56,6 +56,8 @@ export class DepartamentoHomeComponent implements OnInit {
       { name: 'excel', code: 'xlsx' }
     ];
   }
+
+  //cred!:string;
 
   token:string='';
 
