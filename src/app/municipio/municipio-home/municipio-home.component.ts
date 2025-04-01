@@ -90,7 +90,7 @@ export class MunicipioHomeComponent implements OnInit {
       if(depa?.nombre!=null){
         return this.depa2=depa!.nombre;
       }else {
-        return "No se encontraron los departamentos";
+        return "";
       }
 
     }

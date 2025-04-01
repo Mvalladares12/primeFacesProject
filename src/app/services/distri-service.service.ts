@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {DistriDataServiceService} from './distri-data-service.service';
 import {DistritoDTO} from '../models/distritoDTO.model';
 import {Distrito, Muni} from '../models/distrito.model';
+import {MuniDataServiceService} from './muni-data-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DistriServiceService {
 
-  constructor(private dataDistritoService:DistriDataServiceService) { }
+  constructor(private dataDistritoService:DistriDataServiceService, private dataMunicipioService:MuniDataServiceService) { }
 
   setDistritos(myDepartamento:Distrito[]){
     this.distritos=myDepartamento;
@@ -30,7 +31,7 @@ export class DistriServiceService {
 
 
   loadMuni(){
-    return this.dataDistritoService.getMuni();
+    return this.dataMunicipioService.getMunicipios();
   }
 
 

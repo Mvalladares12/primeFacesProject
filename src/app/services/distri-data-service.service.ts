@@ -3,25 +3,27 @@ import {HttpClient} from '@angular/common/http';
 import {Distrito} from '../models/distrito.model';
 import {DistritoDTO} from '../models/distritoDTO.model';
 import {Observable} from 'rxjs';
+import {LoginService} from '../login/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DistriDataServiceService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private loginService: LoginService) { }
 
   private apiURL: string = "http://localhost:8080/distrito";
-  private apiMuni: string = "http://localhost:8080/municipio";
+  // private apiMuni: string = "http://localhost:8080/municipio";
 
   getDistritos(){
-    return this.http.get(this.apiURL);
+    const headers={'Authorization': `Basic ${this.loginService.returnToken()}`}
+    return this.http.get(this.apiURL, {headers});
   }
 
 
-  getMuni(){
-    return this.http.get(this.apiMuni);
-  }
+  // getMuni(){
+  //   return this.http.get(this.apiMuni);
+  // }
 
 
   saveDistritos(distrito:DistritoDTO){

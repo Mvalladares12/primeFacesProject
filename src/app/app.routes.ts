@@ -6,13 +6,14 @@ import {DistritoHomeComponent} from './distrito/distrito-home/distrito-home.comp
 import {MunicipioUpdateComponent} from './municipio/municipio-update/municipio-update.component';
 import {DistritoUpdateComponent} from './distrito/distrito-update/distrito-update.component';
 import {LoginComponent} from './login/login.component';
+import {LoginGuardian} from './login/login-guardian';
 
 export const routes: Routes = [
   {path:'', component: LoginComponent},
-  {path:'depa', component:DepartamentoHomeComponent},
-  {path:'update/:id',component:DepartamentoUpdateComponent,}, //agregar el id
-  {path: 'municipio',component:MunicipioHomeComponent},
-  {path: 'distrito',component:DistritoHomeComponent},
-  {path: 'updateMuni/:id',component:MunicipioUpdateComponent},
-  {path: 'updateDist/:id',component:DistritoUpdateComponent},
+  {path:'depa', component:DepartamentoHomeComponent, canActivate:[LoginGuardian]},
+  {path:'update/:id',component:DepartamentoUpdateComponent,canActivate:[LoginGuardian]}, //agregar el id
+  {path: 'municipio',component:MunicipioHomeComponent, canActivate:[LoginGuardian]},
+  {path: 'distrito',component:DistritoHomeComponent, canActivate:[LoginGuardian]},
+  {path: 'updateMuni/:id',component:MunicipioUpdateComponent, canActivate:[LoginGuardian]},
+  {path: 'updateDist/:id',component:DistritoUpdateComponent, canActivate:[LoginGuardian]},
 ];

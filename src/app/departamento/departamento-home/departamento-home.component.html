@@ -7,22 +7,7 @@
       <div class="flex justify-end">
 
         <div class="flex items-center  gap-3 mr-1.5 mb-1">
-          <select
-            class="form-select w-full p-3 bg-gray-700 rounded-md"
-            id=""
-            [(ngModel)]="seleccion"
-            #departamento="ngModel"
-            required
-          >
-            <option value="" disabled selected class="bg-gray-500 ">Formato</option>
-            <option
-              *ngFor="let depa of formato"
-              class="bg-gray-700  hover:bg-gray-600"
-            >
-              {{depa.name}}
-<!--              <i [class]="'pi pi-file-'+depa.name"></i>-->
-            </option>
-          </select>
+          <p-select [options]="formato" [(ngModel)]="sele" optionLabel="name" placeholder="Formato" class="w-full md:w-56" />
         </div>
 
 

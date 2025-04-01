@@ -20,8 +20,10 @@
       </div>
     </ng-template>
 
+<!--    <p-button label="Toggle Dark Mode" (onClick)="toggleDarkMode()"/>-->
 
     <ng-template #end *ngIf="!isLoged()">
+      <p-button label="" class="mr-2" (onClick)="toggleDarkMode()"><i class="pi pi-moon"></i></p-button>
       <div class="flex items-center gap-2">
         <a routerLink="">
           <p-button label="login" severity="contrast" size="small" />
@@ -30,6 +32,7 @@
     </ng-template>
 
     <ng-template #end *ngIf="isLoged()">
+      <p-button label="" class="mr-2"  (onClick)="toggleDarkMode()"><i class="pi pi-moon"></i></p-button>
       <div class="flex items-center gap-2">
         <a (click)="logout()">
           <p-button label="logout" severity="contrast" size="small" />

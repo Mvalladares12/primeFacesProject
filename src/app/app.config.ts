@@ -8,6 +8,9 @@ import {HttpClient, provideHttpClient} from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/Lara';
+import { CookieService } from 'ngx-cookie-service';
+import {LoginGuardian} from './login/login-guardian';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
@@ -15,9 +18,15 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
+    SweetAlert2Module,
+    LoginGuardian,
+    CookieService,
     providePrimeNG({
       theme: {
-        preset: Lara
+        preset: Lara,
+        options:{
+          darkModeSelector: '.my-app-dark'
+        }
       }
     })
   ]

@@ -60,4 +60,9 @@ export class AppComponent implements OnInit {
   logout(){
     this.loginService.logout();
   }
+
+  toggleDarkMode() {
+    const element = document.querySelector('html');
+    element!.classList.toggle('my-app-dark');
+  }
 }

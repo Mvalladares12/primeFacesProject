@@ -6,6 +6,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
 import {Router} from '@angular/router';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -23,8 +24,9 @@ export class LoginComponent implements OnInit {
 
   username!: string;
   password!: string;
+  token!: string;
 
-  constructor(private loginService: LoginService, private router:Router) { }
+  constructor(private cookieService:CookieService,private loginService: LoginService, private router:Router) { }
 
   login(form: NgForm){
     const username = form.value.username;
@@ -36,7 +38,12 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/depa']);
     })
 
-    //this.loginService.getToken(username, password);
+    this.loginService.getToken(username, password).subscribe(
+      token=>{
+        this.loginService.token = token;
+        this.cookieService.set("token", this.loginService.token);
+      },
+    )
   }
   ngOnInit(): void {
   }

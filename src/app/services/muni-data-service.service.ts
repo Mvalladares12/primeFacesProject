@@ -3,24 +3,20 @@ import {HttpClient} from '@angular/common/http';
 import {MunicipioDTO} from '../models/municipioDTO.model';
 import {Municipio} from '../models/municipio.model';
 import {Observable} from 'rxjs';
+import {LoginService} from '../login/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MuniDataServiceService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private loginService: LoginService) { }
 
   private apiURL: string = "http://localhost:8080/municipio";
-  private apiDepa: string = "http://localhost:8080/departamento";
 
   getMunicipios(){
-    return this.http.get(this.apiURL);
-  }
-
-
-  getDepa(){
-    return this.http.get(this.apiDepa);
+    const headers={'Authorization': `Basic ${this.loginService.returnToken()}`}
+    return this.http.get(this.apiURL,{headers});
   }
 
 

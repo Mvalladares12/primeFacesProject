@@ -15,13 +15,13 @@ export class DepaDataServiceService {
 
 
   getDepartamentos(){
-    const headers={'Authorization': `Basic ${this.loginService.getToken()}`}
+    const headers={'Authorization': `Basic ${this.loginService.returnToken()}`}
     return this.http.get(this.apiURL, {headers});
   }
 
 
   saveDepartamentos(departamento:DepartamentoDTO, token:string){
-    const headers ={'Authorization': `Bearer ${token}`};
+    const headers ={'Authorization': `Basic ${this.loginService.returnToken()}`};
     this.http.post(this.apiURL,departamento, {headers}).subscribe(
       (response)=>console.log('Se guardó el departamento: '+response),
       (error) => console.error(`Error: ${error}`)
@@ -44,7 +44,7 @@ export class DepaDataServiceService {
 
   deleteDepartamentos(index:number, token:string){
     let url= `${this.apiURL}/${index}`;
-    const headers ={'Authorization': `Bearer ${token}`};
+    const headers ={'Authorization': `Basic ${this.loginService.returnToken()}`};
 
     this.http.delete(url, {headers}).subscribe(
       (response) => console.log(`Se ha eliminado el departamento: ${response}`),

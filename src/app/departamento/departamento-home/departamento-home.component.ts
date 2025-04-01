@@ -17,17 +17,22 @@ import {AuthService} from '../../services/auth.service';
 import {MuniServiceService} from '../../services/muni-service.service';
 import {Municipio} from '../../models/municipio.model';
 import {LoginService} from '../../login/login.service';
+import {Select} from 'primeng/select';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 
+interface formato {
+  name: string;
+  code: string;
+}
 
 @Component({
   selector: 'app-departamento-home',
-  imports: [TableModule, ConfirmPopupModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule],
+  imports: [TableModule, ConfirmPopupModule, ButtonModule, ToastModule, CommonModule, RouterLink, ButtonModule, Dialog, InputTextModule, FormsModule, Select, SweetAlert2Module],
   templateUrl: './departamento-home.component.html',
   styles: [
     `.fullscreen-container {
       width: 100%;
       height: 100%;
-      /*overflow: auto*/
     }`
   ],
 })
@@ -43,12 +48,12 @@ export class DepartamentoHomeComponent implements OnInit {
       this.departamentoService.setDepartamentos(this.departamentos);
     })
 
+
     this.municipioService.loadMunicipios().subscribe(myMunicipio => {
       this.municipios=Object.values(myMunicipio);
       this.municipioService.setMunicipios(this.municipios);
     })
 
-    console.log(this.loginService.token);
 
     this.formato = [
       { name: 'pdf', code: 'pdf' },
@@ -57,21 +62,17 @@ export class DepartamentoHomeComponent implements OnInit {
     ];
   }
 
-  //cred!:string;
-
   token:string='';
 
   formato: any[] | undefined;
 
-  seleccion: string='';
+  sele: formato|undefined;
 
   municipios:Municipio[]=[];
 
   departamentos: Departamento[] = [];
 
   visible: boolean = false;
-
-  exist:boolean = false;
 
   cId:number=0;
   cCodigo:string="";
@@ -131,10 +132,10 @@ export class DepartamentoHomeComponent implements OnInit {
   }
 
   generarReporte() {
-    const formato=this.formato!.find(x=>x.name===this.seleccion)
-    console.log(this.seleccion);
+    const formato=this.formato!.find(x=>x.name===this.sele?.name)
+    console.log(this.sele?.code);
     console.log(formato.code);
-    switch (this.seleccion) {
+    switch (this.sele?.name) {
       case 'pdf':
         this.dds.getReport(formato.code).subscribe((data: Blob) => {
           const blob = new Blob([data], { type: 'application/pdf' });
